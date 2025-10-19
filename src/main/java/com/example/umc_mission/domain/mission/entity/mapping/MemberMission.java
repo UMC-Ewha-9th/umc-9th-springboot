@@ -20,7 +20,7 @@ public class MemberMission {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status = Status.beforeStart;
+    private Status status = Status.onProgress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
