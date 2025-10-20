@@ -21,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //생성자 (프록시 객체 생성 허용)
 @AllArgsConstructor(access = AccessLevel.PRIVATE) //생성자 (new 객체 생성 미허용)
 @Getter
-@EntityListeners(AuditingEntityListener.class) //엔티티 감사 (변경 사항 추적)
 @Table(name = "member")
 public class Member extends BaseEntity {
 
@@ -41,6 +40,7 @@ public class Member extends BaseEntity {
     private LocalDate birth;
 
     @Column(name = "address", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Address address;
 
     @Column(name = "detail_address", nullable = false)

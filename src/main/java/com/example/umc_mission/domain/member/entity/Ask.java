@@ -27,6 +27,7 @@ public class Ask extends BaseEntity {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private Status status = Status.Pending;
 
     @ManyToOne(fetch = FetchType.LAZY)
