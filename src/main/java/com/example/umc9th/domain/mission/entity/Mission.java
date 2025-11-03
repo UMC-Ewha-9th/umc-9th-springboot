@@ -3,36 +3,40 @@ package com.example.umc9th.domain.mission.entity;
 import com.example.umc9th.domain.store.entity.Store;
 import com.example.umc9th.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 import lombok.*;
 
-@Getter @Builder
-@AllArgsConstructor @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity @Table(name="missions",
-        uniqueConstraints = @UniqueConstraint(name="uq_missions_store_title", columnNames={"store_id","title"}),
-        indexes = @Index(name="idx_missions_store", columnList="store_id"))
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "missions")
 public class Mission extends BaseEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="store_id", nullable=false, foreignKey=@ForeignKey(name="fk_mission_store"))
+    @Column(nullable = false)
+    private String title;
+
+    @Column(name = "is_active", nullable = false)
+    private boolean isActive;
+
+    @Column(name = "starts_at")
+    private java.time.LocalDateTime startsAt;
+
+    @Column(name = "ends_at")
+    private java.time.LocalDateTime endsAt;
+
+    @Column(name = "reward_points")
+    private Integer rewardPoints;
+
+    @Column(name = "min_spend")
+    private Integer minSpend;
+
+    //  JPQL 인식용 연관관계 추가
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", insertable = false, updatable = false)
     private Store store;
-
-    @Column(nullable=false, length=120) private String title;
-    @Lob private String description;
-
-    @Column(nullable=false) private Integer minSpend;
-    @Column(nullable=false) private Integer rewardPoints;
-
-    private LocalDateTime startsAt;
-    private LocalDateTime endsAt;
-
-    @Column(nullable=false) private Boolean isActive;
-
-    @PrePersist void prePersist() {
-        if (minSpend == null) minSpend = 0;
-        if (rewardPoints == null) rewardPoints = 100;
-        if (isActive == null) isActive = true;
-    }
 }
