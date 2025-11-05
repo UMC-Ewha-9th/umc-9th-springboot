@@ -22,7 +22,7 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ✅ 기존 필드
+    //  기존 필드
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_mission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_review_um"))
     private UserMission userMission;
