@@ -24,6 +24,12 @@ public class Review {
     @Column(length = 500)
     private String content;
 
+    @Column(name = "star")
+    private Double star;
+
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
