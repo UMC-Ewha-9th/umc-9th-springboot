@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long>, ReviewRepositoryCustom { // ✨ 추가됨
 
     Optional<Review> findByUserMission_Id(Long userMissionId);
     boolean existsByUserMission_Id(Long userMissionId);
 
-    // ✅ 가게 상세 - 리뷰 목록 (JPQL + 페이징)
+    //  가게 상세 - 리뷰 목록 (JPQL + 페이징)
     @Query("""
         SELECT r
         FROM Review r
