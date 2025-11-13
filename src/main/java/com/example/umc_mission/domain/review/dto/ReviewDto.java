@@ -10,9 +10,9 @@ import lombok.*;
 public class ReviewDto {
 
     private Long id;
-    private String content;
+    private String storeName;
+    private String memberName;
     private Float star;
-    private Long storeId;
-    private Long memberId;
+    private String content;
 
 }

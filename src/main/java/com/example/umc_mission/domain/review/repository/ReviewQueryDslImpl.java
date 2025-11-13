@@ -1,5 +1,6 @@
 package com.example.umc_mission.domain.review.repository;
 
+import com.example.umc_mission.domain.member.entity.QMember;
 import com.example.umc_mission.domain.review.dto.ReviewDto;
 import com.example.umc_mission.domain.review.entity.QReview;
 import com.example.umc_mission.domain.store.entity.QLocation;
@@ -9,11 +10,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Service
+@Repository // 조회 전용
 @RequiredArgsConstructor
 public class ReviewQueryDslImpl implements ReviewQueryDsl {
 
@@ -23,6 +24,7 @@ public class ReviewQueryDslImpl implements ReviewQueryDsl {
     QReview review = QReview.review;
     QStore store = QStore.store;
     QLocation location = QLocation.location;
+    QMember member = QMember.member;
 
     // 검색 API
     @Override
@@ -37,14 +39,15 @@ public class ReviewQueryDslImpl implements ReviewQueryDsl {
                 .select(Projections.constructor(
                         ReviewDto.class,
                         review.id,
-                        review.content,
+                        review.store.name,
+                        review.member.name,
                         review.star,
-                        review.store.id,
-                        review.member.id
+                        review.content
                         ))
                 .from(review)
                 .leftJoin(store).on(store.id.eq(review.store.id))
                 .leftJoin(location).on(location.id.eq(store.location.id))
+                .leftJoin(member).on(member.id.eq(review.member.id))
                 .where(predicate)
                 .fetch();
     }
@@ -62,13 +65,14 @@ public class ReviewQueryDslImpl implements ReviewQueryDsl {
                 .select(Projections.constructor(
                         ReviewDto.class,
                         review.id,
-                        review.content,
+                        review.store.name,
+                        review.member.name,
                         review.star,
-                        review.store.id,
-                        review.member.id
+                        review.content
                 ))
                 .from(review)
                 .leftJoin(review.store, store)
+                .leftJoin(review.member, member)
                 .where(predicate)
                 .fetch();
 
