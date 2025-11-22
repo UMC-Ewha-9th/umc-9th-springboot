@@ -1,19 +1,15 @@
 package com.example.umc9th.domain.review.service;
 
-import com.example.umc9th.domain.review.entity.Review;
-import com.example.umc9th.domain.review.repository.ReviewRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import com.example.umc9th.domain.review.dto.ReviewReqDTO;
+import com.example.umc9th.domain.review.dto.ReviewResDTO;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
-public class ReviewService {
+public interface ReviewService {
 
-    private final ReviewRepository reviewRepository;
+    // 기존 API
+    List<ReviewResDTO.ReviewInfoDTO> getMyReviews(Long userId, String storeName, Integer rating);
 
-    public List<Review> getMyReviews(Long userId, String storeName, Integer rating) {
-        return reviewRepository.findMyReviews(userId, storeName, rating);
-    }
+    // 신규 추가 API
+    ReviewResDTO.CreateDTO createReview(Long storeId, ReviewReqDTO.CreateDTO dto);
 }
