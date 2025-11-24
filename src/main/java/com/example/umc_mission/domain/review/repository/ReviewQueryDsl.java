@@ -14,6 +14,7 @@ public interface ReviewQueryDsl {
             Predicate predicate
     );
 
+    // 조회 API
     List<ReviewDto> getMyReviews(
             Predicate predicate
     );

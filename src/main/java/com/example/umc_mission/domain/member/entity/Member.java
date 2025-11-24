@@ -28,7 +28,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //자동 생성 전략
     private Long id;
 
-    @Column(name = "name", length = 3, nullable = false) //글자수 제한, NOT NULL 설정
+    @Column(name = "name", nullable = false) //글자수 제한, NOT NULL 설정
     private String name;
 
     @Column(name = "gender", nullable = false)
@@ -46,17 +46,17 @@ public class Member extends BaseEntity {
     @Column(name = "detail_address", nullable = false)
     private String detailAddress;
 
-    @Column(name = "social_uid", nullable = false)
+    @Column(name = "social_uid")
     private String socialUid;
 
-    @Column(name = "social_type", nullable = false)
+    @Column(name = "social_type")
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-    @Column(name = "point", nullable = false)
+    @Column(name = "point")
     private Integer point;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "phone_number")

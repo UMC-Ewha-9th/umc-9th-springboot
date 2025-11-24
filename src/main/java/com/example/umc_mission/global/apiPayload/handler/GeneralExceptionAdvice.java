@@ -18,8 +18,7 @@ public class GeneralExceptionAdvice {
     ) {
         return ResponseEntity.status(ex.getCode().getStatus())
                 .body(ApiResponse.onFailure(
-                        ex.getCode(),
-                        null
+                        ex.getCode()
                 ));
     }
 
@@ -31,8 +30,7 @@ public class GeneralExceptionAdvice {
         BaseErrorCode code = GeneralErrorCode.INTERNAL_SERVER_ERROR;
         return ResponseEntity.status(code.getStatus())
                 .body(ApiResponse.onFailure(
-                        code,
-                        ex.getMessage()
+                        code
                 ));
     }
 
