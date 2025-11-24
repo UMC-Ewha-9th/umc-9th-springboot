@@ -39,8 +39,8 @@ public class ReviewQueryDslImpl implements ReviewQueryDsl {
                 .select(Projections.constructor(
                         ReviewDto.class,
                         review.id,
-                        review.store.name,
-                        review.member.name,
+                        review.store.name.as("storeName"),
+                        review.member.name.as("memberName"),
                         review.star,
                         review.content
                         ))
