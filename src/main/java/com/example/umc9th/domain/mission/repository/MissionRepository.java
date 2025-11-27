@@ -1,6 +1,7 @@
 package com.example.umc9th.domain.mission.repository;
 
 import com.example.umc9th.domain.mission.entity.Mission;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,11 +12,13 @@ import java.util.List;
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 
-    // 기존 메서드 유지
+    // 기존
     List<Mission> findByStore_Id(Long storeId);
     boolean existsByStore_IdAndTitle(Long storeId, String title);
 
-    //  홈 화면: 지역 기반 + 활성 + 기간 유효 미션 (페이징 가능)
+    // 추가된 메서드 - 반드시 import 필요!
+    Page<Mission> findAllByStore_Id(Long storeId, Pageable pageable);
+
     @Query("""
         SELECT m
         FROM Mission m
