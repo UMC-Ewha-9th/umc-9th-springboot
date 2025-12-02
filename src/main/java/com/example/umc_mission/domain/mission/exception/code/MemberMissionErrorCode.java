@@ -12,6 +12,9 @@ public enum MemberMissionErrorCode implements BaseErrorCode {
     NOT_FOUND(HttpStatus.NOT_FOUND,
             "MEMBERMISSION404_1",
             "해당 미션을 찾을 수 없습니다."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST,
+            "MEMBERMISSION400_1",
+            "잘못된 요청으로 수정할 수 없습니다."),
     ;
 
     private final HttpStatus status;

@@ -5,6 +5,9 @@ import com.example.umc_mission.domain.review.dto.ReviewReqDto;
 import com.example.umc_mission.domain.review.dto.ReviewResDto;
 import com.example.umc_mission.domain.review.entity.Review;
 import com.example.umc_mission.domain.store.entity.Store;
+import org.springframework.data.domain.Page;
+
+import java.time.LocalDate;
 
 public class ReviewConverter {
 
@@ -35,6 +38,33 @@ public class ReviewConverter {
                 .content(dto.content())
                 .build();
 
+    }
+
+    // result -> DTO
+    public static ReviewResDto.ReviewPreviewListDto toReviewPreviewListDto(
+            Page<Review> result
+    ){
+        return ReviewResDto.ReviewPreviewListDto.builder()
+                .reviewList(result.getContent().stream()
+                        .map(ReviewConverter::toReviewPreviewDto)
+                        .toList())
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    public static ReviewResDto.ReviewPreviewDto toReviewPreviewDto(
+            Review review
+    ){
+        return ReviewResDto.ReviewPreviewDto.builder()
+                .ownerNickname(review.getMember().getName())
+                .score(review.getStar())
+                .body(review.getContent())
+                .createdAt(LocalDate.from(review.getCreatedAt()))
+                .build();
     }
 
 }
