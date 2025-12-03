@@ -5,6 +5,7 @@ import com.example.umc_mission.domain.mission.dto.MemberMissionReqDto;
 import com.example.umc_mission.domain.mission.dto.MemberMissionResDto;
 import com.example.umc_mission.domain.mission.entity.Mission;
 import com.example.umc_mission.domain.mission.entity.mapping.MemberMission;
+import org.springframework.data.domain.Page;
 
 public class MemberMissionConverter {
 
@@ -29,6 +30,35 @@ public class MemberMissionConverter {
                 .member(member)
                 .mission(mission)
                 .status(dto.status())
+                .build();
+    }
+
+    // result -> Dto
+    public static MemberMissionResDto.myMissionPreviewListDto toMyMissionPreviewListDto(
+            Page<MemberMission> result
+    ){
+        return MemberMissionResDto.myMissionPreviewListDto.builder()
+                .myMissionList(result.getContent().stream()
+                        .map(MemberMissionConverter::toMyMissionPreviewDto)
+                        .toList())
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElement(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    public static MemberMissionResDto.myMissionPreviewDto toMyMissionPreviewDto(
+            MemberMission memberMission
+    ){
+        return MemberMissionResDto.myMissionPreviewDto.builder()
+                .missionId(memberMission.getMission().getId())
+                .status(memberMission.getStatus())
+                .storeName(memberMission.getMission().getStore().getName())
+                .conditional(memberMission.getMission().getConditional())
+                .point(memberMission.getMission().getPoint())
+                .deadline(memberMission.getMission().getDeadline())
                 .build();
     }
 

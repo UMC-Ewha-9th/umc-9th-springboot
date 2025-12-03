@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class ReviewController {
+public class ReviewController implements ReviewControllerDocs {
 
     private final ReviewQueryService reviewQueryService;
     private final ReviewCommandService reviewCommandService;
@@ -40,21 +40,19 @@ public class ReviewController {
 
     }
 
-    // 리뷰 조회
-    @GetMapping("/reviews")
-    public ApiResponse<List<ReviewDto>> getMyReviews(
+    // 내 리뷰 조회
+    @GetMapping("/reviews/my")
+    public ApiResponse<ReviewResDto.ReviewPreviewListDto> getMyReviews(
             @RequestParam Long memberId, // 임시 쿼리
             @RequestParam(required = false) String query,
-            @RequestParam(required = false) String type
+            @RequestParam(required = false) String type,
+            @RequestParam(defaultValue = "1") Integer page
     ){
         // 응답 코드 정의
-        GeneralSuccessCode code = GeneralSuccessCode.OK;
-
-        List<ReviewDto> result = reviewQueryService.getMyReviews(memberId, query, type);
-
+        ReviewSuccessCode code = ReviewSuccessCode.FOUND;
         return ApiResponse.onSuccess(
                 code,
-                result
+                reviewQueryService.getMyReviews(memberId, query, type, page)
         );
     }
 
@@ -64,6 +62,16 @@ public class ReviewController {
             @RequestBody ReviewReqDto.addReviewDto dto
     ){
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATED, reviewCommandService.addReview(dto));
+    }
+
+    // 가게 리뷰 목록 조회
+    @GetMapping("/reviews")
+    public ApiResponse<ReviewResDto.ReviewPreviewListDto> getReviews(
+            @RequestParam String storeName,
+            @RequestParam(defaultValue = "1") Integer page
+    ){
+        ReviewSuccessCode code = ReviewSuccessCode.FOUND;
+        return ApiResponse.onSuccess(code, reviewQueryService.findReview(storeName, page));
     }
 
 }

@@ -10,4 +10,9 @@ public class MemberMissionReqDto {
             Status status
     ){}
 
+    public record completeMemberMissionDto(
+            Long memberId,
+            Long memberMissionId
+    ){}
+
 }

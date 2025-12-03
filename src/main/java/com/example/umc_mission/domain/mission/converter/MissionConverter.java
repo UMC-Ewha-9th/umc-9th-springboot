@@ -4,6 +4,9 @@ import com.example.umc_mission.domain.mission.dto.MissionReqDto;
 import com.example.umc_mission.domain.mission.dto.MissionResDto;
 import com.example.umc_mission.domain.mission.entity.Mission;
 import com.example.umc_mission.domain.store.entity.Store;
+import org.springframework.data.domain.Page;
+
+import java.time.LocalDate;
 
 public class MissionConverter {
 
@@ -33,5 +36,31 @@ public class MissionConverter {
                 .build();
     }
 
+    // result -> Dto
+    public static MissionResDto.MissionPreviewListDto toMissionPreviewListDto(
+            Page<Mission> result
+    ){
+        return MissionResDto.MissionPreviewListDto.builder()
+                .missionList(result.getContent().stream()
+                    .map(MissionConverter::toMissionPreviewDto)
+                    .toList()
+                )
+                .listSize(result.getSize())
+                .totalPage(result.getTotalPages())
+                .totalElements(result.getTotalElements())
+                .isFirst(result.isFirst())
+                .isLast(result.isLast())
+                .build();
+    }
+
+    public static MissionResDto.MissionPreviewDto toMissionPreviewDto(
+            Mission mission
+    ){
+        return MissionResDto.MissionPreviewDto.builder()
+                .conditional(mission.getConditional())
+                .point(mission.getPoint())
+                .deadline(mission.getDeadline())
+                .build();
+    }
 
 }
