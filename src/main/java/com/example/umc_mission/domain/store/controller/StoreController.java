@@ -5,6 +5,7 @@ import com.example.umc_mission.domain.store.dto.StoreResDto;
 import com.example.umc_mission.domain.store.exception.code.StoreSuccessCode;
 import com.example.umc_mission.domain.store.service.command.StoreCommandService;
 import com.example.umc_mission.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class StoreController {
     // 가게 추가
     @PostMapping("/store")
     public ApiResponse<StoreResDto.addStoreDto> addStore(
-            @RequestBody StoreReqDto.addStoreDto dto
+            @RequestBody @Valid StoreReqDto.addStoreDto dto
     ){
         return ApiResponse.onSuccess(StoreSuccessCode.CREATED, storeCommandService.addStore(dto));
     }

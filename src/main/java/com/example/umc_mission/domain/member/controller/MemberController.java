@@ -4,6 +4,7 @@ import com.example.umc_mission.domain.member.dto.MemberReqDto;
 import com.example.umc_mission.domain.member.dto.MemberResDto;
 import com.example.umc_mission.domain.member.exception.code.MemberSuccessCode;
 import com.example.umc_mission.domain.member.service.command.MemberCommandService;
+import com.example.umc_mission.domain.member.service.query.MemberQueryService;
 import com.example.umc_mission.global.apiPayload.ApiResponse;
 import com.example.umc_mission.global.apiPayload.code.GeneralErrorCode;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ import java.util.Map;
 public class MemberController {
 
     private final MemberCommandService memberCommandService;
+    private final MemberQueryService memberQueryService;
 
     // 회원가입
     @PostMapping("/sign-up")
@@ -30,6 +32,14 @@ public class MemberController {
             @RequestBody @Valid MemberReqDto.MemberJoinDto dto
     ) {
         return ApiResponse.onSuccess(MemberSuccessCode.CREATED, memberCommandService.signUp(dto));
+    }
+
+    // 로그인
+    @PostMapping("/login")
+    public ApiResponse<MemberResDto.LoginDto> login(
+            @RequestBody @Valid MemberReqDto.LoginDto dto
+    ){
+        return ApiResponse.onSuccess(MemberSuccessCode.FOUND, memberQueryService.login(dto));
     }
 
 }

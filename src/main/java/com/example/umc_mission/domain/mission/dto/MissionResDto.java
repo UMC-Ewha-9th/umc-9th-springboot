@@ -29,6 +29,7 @@ public class MissionResDto {
 
     @Builder
     public record MissionPreviewDto(
+            Long missionId,
             String conditional,
             Integer point,
             LocalDate deadline
