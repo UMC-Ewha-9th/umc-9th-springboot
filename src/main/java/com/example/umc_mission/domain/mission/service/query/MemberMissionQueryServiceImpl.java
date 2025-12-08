@@ -9,6 +9,7 @@ import com.example.umc_mission.domain.mission.dto.MemberMissionResDto;
 import com.example.umc_mission.domain.mission.entity.mapping.MemberMission;
 import com.example.umc_mission.domain.mission.enums.Status;
 import com.example.umc_mission.domain.mission.repository.MemberMissionRepository;
+import com.example.umc_mission.global.config.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,12 +27,13 @@ public class MemberMissionQueryServiceImpl implements MemberMissionQueryService 
     @Transactional
     @Override
     public MemberMissionResDto.myMissionPreviewListDto getMyMissions(
-            Long memberId,
+            CustomUserDetails user,
             Status status,
             Integer page
     ){
+
         // 사용자 확인
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(user.member.getId())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
         // 페이징 설정

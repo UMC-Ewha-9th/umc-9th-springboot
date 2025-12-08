@@ -11,4 +11,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     //마이페이지 조회
     Optional<MyPage> findMyPageById(Long id);
 
+    Optional<Member> findByEmail(String username);
 }

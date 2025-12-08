@@ -57,6 +57,7 @@ public class MissionConverter {
             Mission mission
     ){
         return MissionResDto.MissionPreviewDto.builder()
+                .missionId(mission.getId())
                 .conditional(mission.getConditional())
                 .point(mission.getPoint())
                 .deadline(mission.getDeadline())

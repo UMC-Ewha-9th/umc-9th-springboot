@@ -12,7 +12,10 @@ import com.example.umc_mission.domain.mission.service.command.MissionCommandServ
 import com.example.umc_mission.domain.mission.service.query.MemberMissionQueryService;
 import com.example.umc_mission.domain.mission.service.query.MissionQueryService;
 import com.example.umc_mission.global.apiPayload.ApiResponse;
+import com.example.umc_mission.global.config.CustomUserDetails;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,36 +30,38 @@ public class MissionController implements MissionControllerDocs {
     // 미션 추가
     @PostMapping("/missions")
     public ApiResponse<MissionResDto.addMissionDto> addMission(
-            @RequestBody MissionReqDto.addMissionDto dto
+            @RequestBody @Valid MissionReqDto.addMissionDto dto
     ){
         return ApiResponse.onSuccess(MissionSuccessCode.CREATED, missionCommandService.addMission(dto));
     }
 
     // 미션 도전
-    @PostMapping("/missions/challenge")
+    @PostMapping("/missions/challenge/{missionId}")
     public ApiResponse<MemberMissionResDto.addMemberMissionDto> addMemberMission(
-            @RequestBody MemberMissionReqDto.addMemberMissionDto dto
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long missionId
     ){
-        return ApiResponse.onSuccess(MemberMissionSuccessCode.CREATED, memberMissionCommandService.addMemberMission(dto));
+        return ApiResponse.onSuccess(MemberMissionSuccessCode.CREATED, memberMissionCommandService.addMemberMission(user, missionId));
     }
 
     // 미션 완료
-    @PatchMapping("/missions/completed")
+    @PatchMapping("/missions/completed/{memberMissionId}")
     public ApiResponse<MemberMissionResDto.myMissionPreviewListDto> completeMemberMission(
-            @RequestBody MemberMissionReqDto.completeMemberMissionDto dto
+            @AuthenticationPrincipal CustomUserDetails user,
+            @PathVariable Long memberMissionId
     ) {
-        return ApiResponse.onSuccess(MemberMissionSuccessCode.OK, memberMissionCommandService.completeMemberMission(dto));
+        return ApiResponse.onSuccess(MemberMissionSuccessCode.OK, memberMissionCommandService.completeMemberMission(user, memberMissionId));
     }
 
     // 내 미션 목록 조회 (도전 중 / 진행 완료)
     @GetMapping("/missions/my")
     public ApiResponse<MemberMissionResDto.myMissionPreviewListDto> getMyMissions(
-            @RequestParam Long memberId, // 임시 쿼리
+            @AuthenticationPrincipal CustomUserDetails user,
             @RequestParam Status status,
             @RequestParam(defaultValue = "1") Integer page
     ){
         MemberMissionSuccessCode code = MemberMissionSuccessCode.FOUND;
-        return ApiResponse.onSuccess(code, memberMissionQueryService.getMyMissions(memberId, status, page));
+        return ApiResponse.onSuccess(code, memberMissionQueryService.getMyMissions(user, status, page));
     }
 
     // 가게 미션 목록 조회

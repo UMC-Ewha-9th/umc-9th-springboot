@@ -5,6 +5,7 @@ import com.example.umc_mission.domain.store.dto.LocationResDto;
 import com.example.umc_mission.domain.store.exception.code.LocationSuccessCode;
 import com.example.umc_mission.domain.store.service.command.LocationCommandService;
 import com.example.umc_mission.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ public class LocationController {
     // 지역 추가
     @PostMapping("/location")
     public ApiResponse<LocationResDto.addLocationDto> addLocation(
-            @RequestBody LocationReqDto.addLocationDto dto
+            @RequestBody @Valid LocationReqDto.addLocationDto dto
     ){
         return ApiResponse.onSuccess(LocationSuccessCode.CREATED, locationCommandService.addLocation(dto));
     }

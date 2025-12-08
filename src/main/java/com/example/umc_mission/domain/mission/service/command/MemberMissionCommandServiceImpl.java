@@ -5,7 +5,6 @@ import com.example.umc_mission.domain.member.exception.MemberException;
 import com.example.umc_mission.domain.member.exception.code.MemberErrorCode;
 import com.example.umc_mission.domain.member.repository.MemberRepository;
 import com.example.umc_mission.domain.mission.converter.MemberMissionConverter;
-import com.example.umc_mission.domain.mission.dto.MemberMissionReqDto;
 import com.example.umc_mission.domain.mission.dto.MemberMissionResDto;
 import com.example.umc_mission.domain.mission.entity.Mission;
 import com.example.umc_mission.domain.mission.entity.mapping.MemberMission;
@@ -16,6 +15,7 @@ import com.example.umc_mission.domain.mission.exception.code.MemberMissionErrorC
 import com.example.umc_mission.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc_mission.domain.mission.repository.MemberMissionRepository;
 import com.example.umc_mission.domain.mission.repository.MissionRepository;
+import com.example.umc_mission.global.config.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,18 +34,19 @@ public class MemberMissionCommandServiceImpl implements MemberMissionCommandServ
     @Override
     @Transactional
     public MemberMissionResDto.addMemberMissionDto addMemberMission(
-            MemberMissionReqDto.addMemberMissionDto dto
+            CustomUserDetails user,
+            Long missionId
     ){
-        // 사용자 존재 여부 검증
-        Member member = memberRepository.findById(dto.memberId())
+        // 사용자 확인
+        Member member = memberRepository.findById(user.member.getId())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
         // 미션 존재 여부 검증
-        Mission mission = missionRepository.findById(dto.missionId())
+        Mission mission = missionRepository.findById(missionId)
                 .orElseThrow(() -> new MissionException(MissionErrorCode.NOT_FOUND));
 
         // 유저 미션 생성
-        MemberMission memberMission = MemberMissionConverter.toMemberMission(dto, member, mission);
+        MemberMission memberMission = MemberMissionConverter.toMemberMission(member, mission);
         // DB 적용
         memberMissionRepository.save(memberMission);
 
@@ -57,14 +58,15 @@ public class MemberMissionCommandServiceImpl implements MemberMissionCommandServ
     @Transactional
     @Override
     public MemberMissionResDto.myMissionPreviewListDto completeMemberMission(
-            MemberMissionReqDto.completeMemberMissionDto dto
+            CustomUserDetails user,
+            Long memberMissionId
     ){
         // 사용자 확인
-        Member member = memberRepository.findById(dto.memberId())
+        Member member = memberRepository.findById(user.member.getId())
                 .orElseThrow(() -> new MemberException(MemberErrorCode.NOT_FOUND));
 
         // 유저 미션 조회
-        MemberMission memberMission = memberMissionRepository.findByMemberAndId(member, dto.memberMissionId())
+        MemberMission memberMission = memberMissionRepository.findByMemberAndId(member, memberMissionId)
                 .orElseThrow(() -> new MemberMissionException(MemberMissionErrorCode.NOT_FOUND));
 
         // 상태 변경 후 DB 적용

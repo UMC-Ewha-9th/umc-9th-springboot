@@ -4,6 +4,7 @@ import com.example.umc_mission.domain.member.entity.mapping.MemberFood;
 import com.example.umc_mission.domain.member.entity.mapping.MemberTerm;
 import com.example.umc_mission.domain.member.enums.Address;
 import com.example.umc_mission.domain.member.enums.Gender;
+import com.example.umc_mission.domain.member.enums.Role;
 import com.example.umc_mission.domain.member.enums.SocialType;
 import com.example.umc_mission.domain.mission.entity.mapping.MemberMission;
 import com.example.umc_mission.global.entity.BaseEntity;
@@ -56,8 +57,14 @@ public class Member extends BaseEntity {
     @Column(name = "point")
     private Integer point;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column(name = "phone_number")
     private String phoneNumber;

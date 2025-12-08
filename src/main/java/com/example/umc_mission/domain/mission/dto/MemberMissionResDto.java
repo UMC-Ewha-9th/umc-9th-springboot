@@ -27,7 +27,7 @@ public class MemberMissionResDto {
 
     @Builder
     public record myMissionPreviewDto(
-            Long missionId,
+            Long memberMissionId,
             Status status,
             String storeName,
             String conditional,

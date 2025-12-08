@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum MemberSuccessCode implements BaseSuccessCode {
 
-    CREATED(HttpStatus.CREATED,
+    FOUND(HttpStatus.FOUND,
             "MEMBER200_1",
-            "성공적으로 사용자를 조회했습니다."),
+            "성공적으로 회원을 조회했습니다."),
+    CREATED(HttpStatus.CREATED,
+            "MEMBER201_1",
+            "회원가입에 성공했습니다."),
     ;
 
     private final HttpStatus status;

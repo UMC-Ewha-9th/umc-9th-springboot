@@ -5,6 +5,7 @@ import com.example.umc_mission.domain.mission.dto.MemberMissionReqDto;
 import com.example.umc_mission.domain.mission.dto.MemberMissionResDto;
 import com.example.umc_mission.domain.mission.entity.Mission;
 import com.example.umc_mission.domain.mission.entity.mapping.MemberMission;
+import com.example.umc_mission.domain.mission.enums.Status;
 import org.springframework.data.domain.Page;
 
 public class MemberMissionConverter {
@@ -22,14 +23,13 @@ public class MemberMissionConverter {
 
     // Dto -> Entity
     public static MemberMission toMemberMission(
-            MemberMissionReqDto.addMemberMissionDto dto,
             Member member,
             Mission mission
     ){
         return MemberMission.builder()
                 .member(member)
                 .mission(mission)
-                .status(dto.status())
+                .status(Status.onProgress)
                 .build();
     }
 
@@ -53,7 +53,7 @@ public class MemberMissionConverter {
             MemberMission memberMission
     ){
         return MemberMissionResDto.myMissionPreviewDto.builder()
-                .missionId(memberMission.getMission().getId())
+                .memberMissionId(memberMission.getId())
                 .status(memberMission.getStatus())
                 .storeName(memberMission.getMission().getStore().getName())
                 .conditional(memberMission.getMission().getConditional())
